@@ -1,119 +1,142 @@
-import os
+import os, time
 
-restaurantes = [{'nome':'Inácio Burguers', 'Categoria':'Hamgueres', 'Atividade':False},
-                {'nome':'Yasmim Sushis', 'Categoria':'Comida Japonesa', 'Atividade':True},
-                {'nome':'Leo Churrascos', 'Categoria':'Carnes', 'Atividade':False}]
+lista_restaurantes = []
 
 def exibir_titulo():
-    '''Função para exibir titulo'''
+    '''Função que vai exibir o titulo inicial'''
+
     print('''
-░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██╗░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
-██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝
-╚█████╗░███████║██████╦╝██║░░██║██████╔╝  █████╗░░░╚███╔╝░██████╔╝██████╔╝█████╗░░╚█████╗░╚█████╗░
-░╚═══██╗██╔══██║██╔══██╗██║░░██║██╔══██╗  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══██╗██╔══╝░░░╚═══██╗░╚═══██╗
-██████╔╝██║░░██║██████╦╝╚█████╔╝██║░░██║  ███████╗██╔╝╚██╗██║░░░░░██║░░██║███████╗██████╔╝██████╔╝
-╚═════╝░╚═╝░░╚═╝╚═════╝░░╚════╝░╚═╝░░╚═╝  ╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░
-\n''')
+        ░██████╗░█████╗░██████╗░░█████╗░██████╗░  ███████╗██╗░░██╗██████╗░██████╗░███████╗░██████╗░██████╗
+        ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗  ██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝
+        ╚█████╗░███████║██████╦╝██║░░██║██████╔╝  █████╗░░░╚███╔╝░██████╔╝██████╔╝█████╗░░╚█████╗░╚█████╗░
+        ░╚═══██╗██╔══██║██╔══██╗██║░░██║██╔══██╗  ██╔══╝░░░██╔██╗░██╔═══╝░██╔══██╗██╔══╝░░░╚═══██╗░╚═══██╗
+        ██████╔╝██║░░██║██████╦╝╚█████╔╝██║░░██║  ███████╗██╔╝╚██╗██║░░░░░██║░░██║███████╗██████╔╝██████╔╝
+        ╚═════╝░╚═╝░░╚═╝╚═════╝░░╚════╝░╚═╝░░╚═╝  ╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░
+    \n''')
 
 def exibir_opcoes():
-    '''Função para exibir as opções disponiveis no programa'''
-    print('1. Cadastrar Restaurante')
-    print('2. Listar Restaurante')
-    print('3. Ativar Restaurante')
-    print('4. Sair\n')
+    '''Função para exibir as opções que são possiveis utilizar no programa'''
 
-def encerrando_programa():
-    '''Função para encerrar o programa quando escolher a opção sair'''
-    limpar_terminal('Encerrando programa')
+    print('1. Cadastrar novo restaurantes.\n'
+    '2. Listar restaurantes cadastrados.\n'
+    '3. Ativar restaurante cadastrado.\n'
+    '4. Sair.\n')
+    
+    try:
+        escolha = int(input('Escolha uma das opções a seguir: '))
+        verificar_opcao(escolha)
+    
+    except:
+        mensagem_opcao('Opção invalida!')
+        main()
 
-def opcao_invalida():
-    '''Função para quando inserir uma opção invalida'''
-    print('Opção invalida!\n')
-    reiniciar()
+def cadastrando_novo_restaurante():
+    '''Função que vai cadastrar novos restaurantes'''
 
-def cadastrar_novo_restaurante():
-    '''Essa Função é responsavel por cadastrar novos restaurantes'''
-    limpar_terminal('Cadastro de novos Restaurantes')
-    nome_restaurante = input('Digite o nome restaurante que deseja cadastrar: ')
-    categoria_restaurante = input(f'Digite a categoria do restaurante {nome_restaurante}: ')
-    dados_restaurante = {'nome': nome_restaurante, 'Categoria': categoria_restaurante, 'Atividade': False}
-    restaurantes.append(dados_restaurante)
+    nome_restaurante = input('Digite o nome do novo restaurante: ').upper()
     print('')
-    print(f'O restaurante {nome_restaurante} foi cadastrado com sucesso\n')
-    reiniciar()
+    categoria_restaurante = input('Digite a categoria do novo restaurante: ').upper()
+    print('')
+    status_restaurante = 'desativado'
 
-def listar_restaurantes():
-    '''Função para listar todos os restaurantes cadastrados'''
-    limpar_terminal('Listando todos os restaurantes')
-    print(f'{'Nome do Restaurante:'.ljust(20)} | {'Categoria do Restaurante:'.ljust(20)} | {'Status do Restaurante:'.ljust(20)} \n')
-    for i in restaurantes:
+    dados_novo_restaurante = {'nome' : nome_restaurante , 'categoria' : categoria_restaurante , 'status' : status_restaurante}
+    lista_restaurantes.append(dados_novo_restaurante)
+    
+    retorno()
+
+def listando_restaurantes():
+    '''Função que vai exibir os restaurantes cadastrados e algumas informações adicionais'''
+
+    print(f'{'Nome do Restaurante'.ljust(20)} | {'Categoria do Restaurante'.ljust(20)} | {'Status do Restaurante'.ljust(20)}\n')
+
+    for i in lista_restaurantes:
         nome_restaurante = i['nome']
-        cadeira_restaurante = i['Categoria']
-        atividade_restaurante = 'ativo' if i['Atividade'] else 'desativado'
-        print(f'-> {nome_restaurante.ljust(20)} | {cadeira_restaurante.ljust(20)} | {atividade_restaurante.ljust(20)}\n')
-    reiniciar()
+        categoria_restaurante = i['categoria']
+        if i['status'] == 'ativo':
+            status_restaurante = 'ativo'
+        
+        else:
+            status_restaurante = 'desativado'
+
+        print(f'{nome_restaurante.title().ljust(20)} | {categoria_restaurante.title().ljust(24)} | {status_restaurante.title().ljust(20)}\n')
+
+    retorno()
 
 def ativando_restaurante():
-    '''Função para ativar um restaurante recem inserido'''
-    limpar_terminal('Alterando status do restaurante')
-    nome_restaurante = input('Digite o nome do restaurante que deseja alterar o status: ')
-    restaurante_encontrado = False
+    '''Função usada para ativar restaurantes'''
 
-    for i in restaurantes:
-        if i['nome'] == nome_restaurante:
-            restaurante_encontrado = True
-            i['Atividade'] = not i['Atividade']
-            mensagem = f'O restaurante {nome_restaurante} foi ativado com sucesso' if i['Atividade'] else f'O restaurante {nome_restaurante} foi desativado com sucesso'
-            print(mensagem)
+    nome_restaurante = input('Digite o restaurante que deseja ativas: ').upper()
+    encontrado = 'nao'
     
-    if not restaurante_encontrado:
-        print('O Restaurante não foi encontrado')
-    reiniciar()
+    for i in lista_restaurantes:
+        if i['nome'] == nome_restaurante:
+            if i['status'] == 'desativado':
+                i['status'] = 'ativo'
+                print(f'\nO restaurante {nome_restaurante.title()} está ativo agora\n')
+                encontrado = 'sim'
+                break
 
-def reiniciar():
-    '''Função para reiniciar as opções para selecionar uma nova'''
-    input('Digite uma tecla para voltar ao menu principal: ')
+            else:
+                print(f'\nO restaurante {nome_restaurante.title()} já está ativo!\n')
+                encontrado = 'sim'
+                break
+
+    if encontrado == 'sim':
+        retorno()
+    
+    else:
+        print(f'\nO restaurante {nome_restaurante.title()} não foi encontrado na lista de cadastros!\n')
+        retorno()
+
+def limpar_terminal():
+    '''Função que vai limpar o terminal'''
+
+    os.system('cls')
+
+def retorno():
+    '''Função que vai servir para exibir uma mensagem repetitiva'''
+
+    input('Aperte qualquer tecla para retornar ao menu: ')
+    limpar_terminal()
+    print('Voltando ao menu...')
+    time.sleep(2)
     main()
 
-def limpar_terminal(texto):
-    '''Função para limpar textos anteriores'''
-    os.system('cls')
-    linha = '*' * (len(texto) + 4)
-    print(linha)
+def verificar_opcao(escolha):
+    '''Função que vai verificar qual opção você escolheu e direcionar para a função correspodente'''
+    
+    if escolha == 1:
+        mensagem_opcao('Cadastrando novo restaurante...')
+        cadastrando_novo_restaurante()
+
+    elif escolha == 2:
+        mensagem_opcao('Verificando restaurantes no sistema...')
+        listando_restaurantes()
+
+    elif escolha == 3:
+        mensagem_opcao('Ativando restaurante no sistema...')
+        ativando_restaurante()
+
+    elif escolha == 4:
+        mensagem_opcao('Encerrando programa...')
+        retorno()
+
+    else:
+        mensagem_opcao('Opção invalida!')
+        main()
+
+def mensagem_opcao(texto):
+    limpar_terminal()
     print(texto)
-    print(linha)
-    print()
-
-def escolher_opcoes(): 
-    '''Função para escolher a opção desejada'''
-    try:  
-        opcao_escolhida = int(input('Escolha uma opção: '))
-
-        if opcao_escolhida == 1:
-            print('Cadastrar restaurante')
-            cadastrar_novo_restaurante()
-
-        elif opcao_escolhida == 2:
-            print('Listar restaurantes')
-            listar_restaurantes()
-
-        elif opcao_escolhida == 3:
-            ativando_restaurante()
-
-        elif opcao_escolhida == 4:
-            encerrando_programa()
-
-        else:
-            opcao_invalida()
-
-    except:
-        opcao_invalida()
+    time.sleep(2)
+    limpar_terminal()
 
 def main():
+    '''Função que vai rodar códigos iniciais e principais'''
     os.system('cls')
     exibir_titulo()
     exibir_opcoes()
-    escolher_opcoes()
+    
 
 if __name__ == '__main__':
     main()
